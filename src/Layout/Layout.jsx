@@ -28,6 +28,7 @@ export default function LayoutComponent(){
             mode="inline"
             defaultSelectedKey={['1']}
             defaultSelectedKeys={['1']}
+            className="menu"
             items={[
               {
                 key: '1',

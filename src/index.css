@@ -1,3 +1,10 @@
-
+@keyframes translate {
+  0% {
+    translate: 0 20px;
+  }
+  100% {
+    translate: 0 0;
+  }
+}
 
 /*# sourceMappingURL=index.css.map */

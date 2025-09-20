@@ -2,6 +2,8 @@ import {Button} from "antd";
 import {useState} from "react";
 import {Spin} from "antd";
 import styles from './QuizPage.module.css'
+import {questionsData} from "../../utils/questionsData.js";
+import Question from "../../components/Question/Question.jsx";
 
 export default function QuizPage(){
   const [isQuizOpen, setIsQuizOpen] = useState(false)
@@ -17,7 +19,7 @@ export default function QuizPage(){
   return (
     <>
       {isQuizOpen && !isLoading ? (
-        <h1>quiz is starting</h1>
+        <Question/>
       ) : (
         <section className={styles.section}>
           <Button type="primary" onClick={loaded}>Press if you`re ready</Button>
