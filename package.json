@@ -16,6 +16,7 @@
     "lint:fix": "npm run lint:js:fix ; npm run lint:css:fix; npm run format"
   },
   "dependencies": {
+    "antd": "^5.27.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
