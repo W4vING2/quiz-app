@@ -1,104 +1,78 @@
 import {Card, Button, Alert} from "antd";
-import {questionsData} from "../../utils/questionsData.js";
-import {useEffect, useState} from "react";
+import {useEffect, useLayoutEffect, useState} from "react";
+import {handleClick} from "../../utils/handleClick.js";
+import './Question.css'
 
-export default function Question(){
+export default function Question() {
   const [indexOfQuestion, setIndexOfQuestion] = useState(0)
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
   const [count, setCount] = useState(0)
-  const questionCard = questionsData[indexOfQuestion]
-
-  const handleClick = (answer, e) => {
-    if (answer === questionCard.correctAnswer){
-      if (e.target instanceof HTMLButtonElement){
-        e.target.style.border = '1px solid green'
-        e.target.style.color = 'green'
-        e.target.querySelector('span').style.color = 'green'
-      } else {
-        e.target.style.color = 'green'
-        e.target.closest('button').style.border = '1px solid green'
-      }
-      setIndexOfQuestion(indexOfQuestion + 1)
-      setCount(count + 1)
-      setIsSuccess(true)
-      setTimeout(() => {
-        setIsSuccess(false)
-      }, 2000)
-    } else {
-      if (e.target instanceof HTMLButtonElement){
-        e.target.style.border = '1px solid red'
-        e.target.style.color = 'red'
-        e.target.querySelector('span').style.color = 'red'
-      } else {
-        e.target.style.color = 'red'
-        e.target.closest('button').style.border = '1px solid red'
-      }
-      setIndexOfQuestion(indexOfQuestion + 1)
-      setIsError(true)
-      setTimeout(() => {
-        setIsError(false)
-      }, 2000)
-    }
-  }
+  const [questions, setQuestions] = useState([])
 
   useEffect(() => {
-    const button = document.querySelectorAll('.answer')
-    button.forEach((el) => {
-      el.style.color = 'black'
-      el.style.border = '1px solid black'
-    })
-    const span = document.querySelectorAll('span')
-    span.forEach((el) => {
-      if (el.closest('.answer') !== null) {
-        el.style.color = 'black'
-      } else{
-        el.style.color = 'white'
-      }
-    })
-  }, [questionCard])
+    fetch("http://localhost:4000/questions").then(response => response.json())
+      .then(data => setQuestions(data))
+  }, [])
 
-  return (
-    <>
-      {questionCard === null || questionCard === undefined ? (
-        <h1 style={{
-          position: 'absolute',
-          top: '50vh',
-          left: '70vh'
-        }}>Total points of answers: {count}/5</h1>
-      ) : (
-        <Card title={`question #${questionCard.key}`}>
-          <Card type="inner" title={questionCard.question}>
-            <Button className="answer" style={{
-              width: '600px',
-              marginBlock: '10px',
-              height: '50px'
-            }} onClick={(e) => handleClick(questionCard.answerFirst, e)}>{questionCard.answerFirst}</Button>
-            <Button className="answer" style={{
-              width: '600px',
-              marginBlock: '10px',
-              height: '50px'
-            }} onClick={(e) => handleClick(questionCard.answerSecond, e)}>{questionCard.answerSecond}</Button>
-            <Button className="answer" style={{
-              width: '600px',
-              marginBlock: '10px',
-              height: '50px'
-            }} onClick={(e) => handleClick(questionCard.answerThird, e)}>{questionCard.answerThird}</Button>
+  useLayoutEffect(() => {
+      document.querySelectorAll('.answer').forEach((el) => {
+        if (el.querySelector('img') !== null) return
+        el.style.color = 'black'
+        el.style.border = '1px solid black'
+      })
+      document.querySelectorAll('span').forEach((el) => {
+        if (el.closest('.answer') !== null) el.style.color = 'black'
+      })
+    }, [questions[indexOfQuestion]])
+
+    return (
+      <>
+        {questions[indexOfQuestion] === null || questions[indexOfQuestion] === undefined ? (
+          <h1 className="heading">Total points of answers: {count}/{questions.length}</h1>
+        ) : (
+          <Card title={`Question #${questions[indexOfQuestion].key + 1}`}>
+            <Card
+              type="inner"
+              title={questions[indexOfQuestion].question}
+            >
+              <Button
+                className='answer'
+                onClick={(e) => handleClick(e, questions[indexOfQuestion].answerFirst, questions[indexOfQuestion], indexOfQuestion, setIndexOfQuestion, setCount, setIsSuccess, setIsError, count)}
+              >{questions[indexOfQuestion].answerFirst}</Button>
+              <Button
+                className="answer"
+                onClick={(e) => handleClick(e, questions[indexOfQuestion].answerSecond, questions[indexOfQuestion], indexOfQuestion, setIndexOfQuestion, setCount, setIsSuccess, setIsError, count)}
+              >{questions[indexOfQuestion].answerSecond}</Button>
+              <Button
+                className="answer"
+                onClick={(e) => handleClick(e, questions[indexOfQuestion].answerThird, questions[indexOfQuestion], indexOfQuestion, setIndexOfQuestion, setCount, setIsSuccess, setIsError, count)}
+              >{questions[indexOfQuestion].answerThird}</Button>
+            </Card>
           </Card>
-        </Card>
-      )}
-      {isSuccess ? (
-        <Alert message="Correct answer" type="success" style={{
-          marginTop: '20px',
-          animation: 'translate 1s ease'
-        }} showIcon />
-      ) : ''}
-      {isError ? (
-        <Alert message="Incorrect answer" type="error" showIcon style={{
-          marginTop: '20px',
-          animation: 'translate 1s ease'
-        }} />
-      ) : ''}
-    </>
-  )
-}
+        )}
+        {isSuccess ? (
+          <Alert
+            message="Correct answer"
+            type="success"
+            showIcon
+            style={{
+              marginTop: '20px',
+              animation: 'translate 1s ease'
+            }}
+          />
+        ) : ''}
+        {isError ? (
+          <Alert
+            message="Incorrect answer"
+            type="error"
+            showIcon
+            style={{
+              marginTop: '20px',
+              animation: 'translate 1s ease'
+            }}
+          />
+        ) : ''}
+      </>
+    )
+  }

@@ -2,7 +2,6 @@ import {Button} from "antd";
 import {useState} from "react";
 import {Spin} from "antd";
 import styles from './QuizPage.module.css'
-import {questionsData} from "../../utils/questionsData.js";
 import Question from "../../components/Question/Question.jsx";
 
 export default function QuizPage(){
@@ -14,7 +13,7 @@ export default function QuizPage(){
     setIsLoading(true)
     setTimeout(() => {
       setIsLoading(false)
-    }, 1000)
+    }, 700)
   }
   return (
     <>
