@@ -1,19 +1,19 @@
-.answer{
-  width: 600px ;
-  margin-block: 10px ;
-  height: 50px ;
+.answer {
+  width: 600px;
+  margin-block: 10px;
+  height: 50px;
   transition: all 0.4s ease;
-  &>span{
+  & > span {
     transition: all 0.4s ease !important;
   }
-  &:hover{
+  &:hover {
     border-color: #3333ff !important;
-    &>span{
+    & > span {
       color: #3333ff !important;
     }
   }
 }
-.heading{
+.heading {
   position: absolute;
   top: 50vh;
   left: 70vh;

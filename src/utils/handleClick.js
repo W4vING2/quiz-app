@@ -1,6 +1,16 @@
-export const handleClick = (e, answer, questionCard, indexOfQuestion,  setIndexOfQuestion, setCount, setIsSuccess, setIsError, count) => {
-  if (answer === questionCard.correctAnswer){
-    if (e.target instanceof HTMLButtonElement){
+export const handleClick = (
+  e,
+  answer,
+  questionCard,
+  indexOfQuestion,
+  setIndexOfQuestion,
+  setCount,
+  setIsSuccess,
+  setIsError,
+  count,
+) => {
+  if (answer === questionCard.correctAnswer) {
+    if (e.target instanceof HTMLButtonElement) {
       e.target.style.border = '1px solid green'
       e.target.style.color = 'green'
       e.target.querySelector('span').style.color = 'green'
@@ -15,7 +25,7 @@ export const handleClick = (e, answer, questionCard, indexOfQuestion,  setIndexO
       setIsSuccess(false)
     }, 1000)
   } else {
-    if (e.target instanceof HTMLButtonElement){
+    if (e.target instanceof HTMLButtonElement) {
       e.target.style.border = '1px solid red'
       e.target.style.color = 'red'
       e.target.querySelector('span').style.color = 'red'
