@@ -1,11 +1,14 @@
 {
   "name": "quiz-app",
+  "homepage": "https://W4vING2.github.io/quiz-app/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "predeploy": "bun run build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
@@ -20,6 +23,7 @@
     "@ant-design/icons": "5.x",
     "@supabase/supabase-js": "^2.57.4",
     "antd": "^5.27.4",
+    "gh-pages": "^6.3.0",
     "json-server": "^1.0.0-beta.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
