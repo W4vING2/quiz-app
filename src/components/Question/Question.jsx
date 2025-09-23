@@ -38,8 +38,8 @@ export default function Question() {
       {questions[index] === undefined ? (
         <h1 className="heading">Total points of answers: {count}/5</h1>
       ) : (
-        <Card title={`Question #${index + 1}`}>
-          <Card type="inner" title={questions[index].question}>
+        <Card title={`Question #${index + 1}`} className="card">
+          <Card type="inner" className="title" title={questions[index].question}>
             <Button
               className="answer"
               onClick={(e) =>

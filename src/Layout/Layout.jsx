@@ -94,7 +94,7 @@ export default function LayoutComponent() {
         </Sider>
         <Layout
           style={{
-            backgroundColor: { themeColor } === 'dark' ? '#001529' : '#c9c9c9',
+            backgroundColor:  themeColor  === 'light' ? '#001529' : '#c9c9c9',
           }}
         >
           <Header style={headerStyle}>
