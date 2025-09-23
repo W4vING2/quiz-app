@@ -6,8 +6,8 @@ import {
   UserOutlined,
   VideoCameraOutlined,
 } from '@ant-design/icons'
-import React, { useState } from 'react'
-import { renderItems } from '../utils/RenderItems.jsx'
+import React, { useCallback, useMemo, useState } from 'react'
+import { RenderItems } from '../utils/RenderItems.jsx'
 import SwitcherTheme from '../components/SwitcherTheme/SwitcherTheme.jsx'
 import { useTheme } from '../hooks/useTheme.js'
 
@@ -19,6 +19,41 @@ export default function LayoutComponent() {
   const {
     token: { borderRadiusLG },
   } = theme.useToken()
+
+  const renderedItems = useMemo(() => {
+    return <RenderItems keyValue={key} />
+  }, [key])
+
+  const siderStyle = useMemo(
+    () => ({
+      backgroundColor: themeColor === 'dark' ? '#001529' : 'white',
+    }),
+    [themeColor],
+  )
+
+  const headerStyle = useMemo(
+    () => ({
+      backgroundColor: themeColor === 'light' ? '#001529' : 'white',
+      color: themeColor === 'light' ? 'white' : '#001529',
+      padding: 0,
+      display: 'flex',
+      justifyContent: 'space-between',
+    }),
+    [themeColor],
+  )
+
+  const contentStyle = useMemo(
+    () => ({
+      backgroundColor: themeColor === 'light' ? '#001529' : 'white',
+      color: themeColor === 'light' ? 'white' : '#001529',
+      margin: '24px 16px',
+      padding: 24,
+      minHeight: 280,
+      borderRadius: borderRadiusLG,
+    }),
+    [themeColor, borderRadiusLG],
+  )
+
   return (
     <>
       <Layout
@@ -27,15 +62,7 @@ export default function LayoutComponent() {
         }}
       >
         <Sider
-          style={
-            themeColor === 'dark'
-              ? {
-                  backgroundColor: '#001529',
-                }
-              : {
-                  backgroundColor: 'white',
-                }
-          }
+          style={siderStyle}
           trigger={null}
           collapsible
           collapsed={collapsed}
@@ -62,39 +89,15 @@ export default function LayoutComponent() {
                 label: 'Add a question',
               },
             ]}
-            onClick={({ key }) => setKey(key)}
+            onClick={useCallback(({ key }) => setKey(key), [])}
           />
         </Sider>
         <Layout
-          style={
-            themeColor === 'light'
-              ? {
-                  backgroundColor: 'black',
-                }
-              : {
-                  backgroundColor: '#d7d7d7',
-                }
-          }
+          style={{
+            backgroundColor: { themeColor } === 'dark' ? '#001529' : '#c9c9c9',
+          }}
         >
-          <Header
-            style={
-              themeColor === 'light'
-                ? {
-                    backgroundColor: '#001529',
-                    color: 'white',
-                    padding: 0,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                  }
-                : {
-                    backgroundColor: 'white',
-                    color: '#001529',
-                    padding: 0,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                  }
-            }
-          >
+          <Header style={headerStyle}>
             <Button
               type="text"
               icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -117,29 +120,7 @@ export default function LayoutComponent() {
             />
             <SwitcherTheme setTheme={setThemeColor} theme={themeColor} />
           </Header>
-          <Content
-            style={
-              themeColor === 'light'
-                ? {
-                    backgroundColor: '#001529',
-                    color: 'white',
-                    margin: '24px 16px',
-                    padding: 24,
-                    minHeight: 280,
-                    borderRadius: borderRadiusLG,
-                  }
-                : {
-                    backgroundColor: 'white',
-                    color: '#001529',
-                    margin: '24px 16px',
-                    padding: 24,
-                    minHeight: 280,
-                    borderRadius: borderRadiusLG,
-                  }
-            }
-          >
-            {renderItems(key)}
-          </Content>
+          <Content style={contentStyle}>{renderedItems}</Content>
         </Layout>
       </Layout>
     </>

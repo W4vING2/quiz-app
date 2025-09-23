@@ -1,6 +1,7 @@
 import { Button, Card, Input, Radio } from 'antd'
 import styles from './FormAdd.module.css'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { supabase } from '../../utils/supabase.js'
 
 export default function FormAdd() {
   const [name, setName] = useState('')
@@ -10,15 +11,7 @@ export default function FormAdd() {
   const [radio, setRadio] = useState(1)
   const [create, setCreate] = useState(false)
 
-  const [questions, setQuestions] = useState([])
-
-  useEffect(() => {
-    fetch('http://localhost:4000/questions')
-      .then((res) => res.json())
-      .then((data) => setQuestions(data))
-  }, [])
-
-  const submitForm = () => {
+  const submitForm = async () => {
     let correctAnswer
     if (radio === 1) {
       correctAnswer = first
@@ -27,25 +20,14 @@ export default function FormAdd() {
     } else {
       correctAnswer = third
     }
-    const newQuestion = {
+
+    const { data, error } = await supabase.from('questions').insert({
       question: name,
       answerFirst: first,
       answerSecond: second,
       answerThird: third,
-      correctAnswer,
-      key: questions.length,
-    }
-
-    fetch('http://localhost:4000/questions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newQuestion),
+      correctAnswer: correctAnswer,
     })
-      .then((response) => response.json())
-      .then((json) => {
-        setQuestions([...questions, json])
-        console.log(json, questions)
-      })
 
     setName('')
     setFirst('')

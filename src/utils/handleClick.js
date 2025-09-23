@@ -1,15 +1,15 @@
 export const handleClick = (
   e,
   answer,
-  questionCard,
-  indexOfQuestion,
-  setIndexOfQuestion,
+  remain,
   setCount,
   setIsSuccess,
   setIsError,
   count,
+  setIndex,
+  index,
 ) => {
-  if (answer === questionCard.correctAnswer) {
+  if (remain.correctAnswer === answer) {
     if (e.target instanceof HTMLButtonElement) {
       e.target.style.border = '1px solid green'
       e.target.style.color = 'green'
@@ -18,7 +18,7 @@ export const handleClick = (
       e.target.style.color = 'green'
       e.target.closest('button').style.border = '1px solid green'
     }
-    setIndexOfQuestion(indexOfQuestion + 1)
+    setIndex(index + 1)
     setCount(count + 1)
     setIsSuccess(true)
     setTimeout(() => {
@@ -33,7 +33,7 @@ export const handleClick = (
       e.target.style.color = 'red'
       e.target.closest('button').style.border = '1px solid red'
     }
-    setIndexOfQuestion(indexOfQuestion + 1)
+    setIndex(index + 1)
     setIsError(true)
     setTimeout(() => {
       setIsError(false)

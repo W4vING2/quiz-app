@@ -2,18 +2,24 @@ import { Card, Button, Alert } from 'antd'
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { handleClick } from '../../utils/handleClick.js'
 import './Question.css'
+import { supabase } from '../../utils/supabase.js'
 
 export default function Question() {
-  const [indexOfQuestion, setIndexOfQuestion] = useState(0)
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
   const [count, setCount] = useState(0)
   const [questions, setQuestions] = useState([])
+  const [index, setIndex] = useState(0)
 
   useEffect(() => {
-    fetch('http://localhost:4000/questions')
-      .then((response) => response.json())
-      .then((data) => setQuestions(data))
+    const dataLoading = async () => {
+      const { data } = await supabase.from('questions').select('*')
+
+      const randomFive = [...data].sort(() => Math.random() - 0.5).slice(0, 5)
+
+      setQuestions(randomFive)
+    }
+    dataLoading()
   }, [])
 
   useLayoutEffect(() => {
@@ -25,71 +31,68 @@ export default function Question() {
     document.querySelectorAll('span').forEach((el) => {
       if (el.closest('.answer') !== null) el.style.color = 'black'
     })
-  }, [questions[indexOfQuestion]])
+  }, [index])
 
   return (
     <>
-      {questions[indexOfQuestion] === null ||
-      questions[indexOfQuestion] === undefined ? (
-        <h1 className="heading">
-          Total points of answers: {count}/{questions.length}
-        </h1>
+      {questions[index] === undefined ? (
+        <h1 className="heading">Total points of answers: {count}/5</h1>
       ) : (
-        <Card title={`Question #${questions[indexOfQuestion].key + 1}`}>
-          <Card type="inner" title={questions[indexOfQuestion].question}>
+        <Card title={`Question #${index + 1}`}>
+          <Card type="inner" title={questions[index].question}>
             <Button
               className="answer"
               onClick={(e) =>
                 handleClick(
                   e,
-                  questions[indexOfQuestion].answerFirst,
-                  questions[indexOfQuestion],
-                  indexOfQuestion,
-                  setIndexOfQuestion,
+                  questions[index].answerFirst,
+                  questions[index],
                   setCount,
                   setIsSuccess,
                   setIsError,
                   count,
+                  setIndex,
+                  index,
                 )
               }
             >
-              {questions[indexOfQuestion].answerFirst}
+              {questions[index].answerFirst}
             </Button>
             <Button
               className="answer"
               onClick={(e) =>
                 handleClick(
                   e,
-                  questions[indexOfQuestion].answerSecond,
-                  questions[indexOfQuestion],
-                  indexOfQuestion,
-                  setIndexOfQuestion,
+                  questions[index].answerSecond,
+                  questions[index],
                   setCount,
                   setIsSuccess,
                   setIsError,
                   count,
+                  setIndex,
+                  index,
                 )
               }
             >
-              {questions[indexOfQuestion].answerSecond}
+              {questions[index].answerSecond}
             </Button>
             <Button
               className="answer"
               onClick={(e) =>
                 handleClick(
                   e,
-                  questions[indexOfQuestion].answerThird,
-                  questions[indexOfQuestion],
-                  indexOfQuestion,
-                  setIndexOfQuestion,
+                  questions[index].answerThird,
+                  questions[index],
                   setCount,
                   setIsSuccess,
                   setIsError,
                   count,
+                  setIndex,
+                  index,
                 )
               }
             >
-              {questions[indexOfQuestion].answerThird}
+              {questions[index].answerThird}
             </Button>
           </Card>
         </Card>
